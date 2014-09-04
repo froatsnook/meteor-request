@@ -13,9 +13,9 @@ Example use to grab something like an image is as follows:
 ```javascript
 var result = request.getSync(url, {
 	encoding: null
-})
+});
 
-var buffer = result.body
+var buffer = result.body;
 ```
 
 At which point, `buffer` contains unaltered image data that you can pass to
