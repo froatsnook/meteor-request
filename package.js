@@ -2,7 +2,7 @@ Package.describe({
 	summary: "A Simplified HTTP client",
 	version: "2.40.0",
 	git: "https://github.com/czbaker/meteor-request.git",
-	name: "cbaker:request"
+	name: "czbaker:request"
 });
 
 Npm.depends({
