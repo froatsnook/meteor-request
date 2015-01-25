@@ -1,8 +1,5 @@
 {
   "dependencies": {
-    "fibers": {
-      "version": "1.0.1"
-    },
     "request": {
       "version": "2.40.0",
       "dependencies": {
