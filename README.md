@@ -20,3 +20,7 @@ var buffer = result.body;
 
 At which point, `buffer` contains unaltered image data that you can pass to
 something like CollectionFS for storage, which can take a `Buffer` as input.
+
+Why forked?
+===========
+Wasn't working on Mac OS X because native component bundled.
