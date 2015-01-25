@@ -6,7 +6,6 @@ Package.describe({
 });
 
 Npm.depends({
-	"fibers": "1.0.1",
 	"request": "2.40.0"
 })
 
