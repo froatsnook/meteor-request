@@ -1,22 +1,39 @@
 // Get our NPM stuff.
-var Future = Npm.require("fibers/future");
 request = Npm.require("request");
 
-// This is our main wrapping function, using Fibers.
-var requestSync = function(uri, options) {
-	var future = new Future();
+// Wrap request with something that can be `Meteor.wrapAsync`ed.
+var requestAsync = function(uri, options, callback) {
+	if (typeof uri === "function") {
+		callback = uri;
+		uri = undefined;
+		options = undefined;
+	}
+
+	if (typeof options === "function") {
+		callback = options;
+		options = undefined;
+	}
+
 	request(uri, options, function(error, response, body) {
 		if (error) {
 			console.log(error);
-			throw error;
+			callback(error);
+		} else {
+			callback(null, {
+				response: response,
+				body: body
+			});
 		}
-		future.return({
-			response: response,
-			body: body
-		});
 	});
-	return future.wait();
 };
+
+// Make a sync function out of it.
+var requestSync;
+if (typeof Meteor.wrapAsync === "function") {
+	requestSync = Meteor.wrapAsync(requestAsync);
+} else {
+	requestSync = Meteor._wrapAsync(requestAsync);
+}
 
 // Use this to extend the prototype
 _.extend(request, {
