@@ -15,3 +15,10 @@ Package.onUse(function(api) {
 	api.addFiles('server/lib/meteor-request.js','server');
 	api.export('request','server');
 });
+
+Package.onTest(function(api) {
+    api.use("tinytest");
+    api.use("froatsnook:request");
+
+    api.addFiles("test/request-tests.js");
+});
