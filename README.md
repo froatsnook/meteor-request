@@ -31,9 +31,13 @@ var res5 = request.delSync(uri, options);
 var res5 = request.getSync(uri, options);
 ```
 
-The `uri` is required.  `options` are optional, and are passed on to
+Params
+------
+The `uri` is required.  The `options` are optional, and are passed on to
 `request`.
 
+Errors
+------
 ```javascript
 try {
     var res = request.getSync(urlThatHangs, {
@@ -42,6 +46,21 @@ try {
 } catch (err) {
     console.assert(err.code === "ETIMEDOUT");
 }
+```
+
+Example with POST body
+----------------------
+```javascript
+var buffer = new Buffer([0,1]);
+var res = request.postSync("http://example.com/echoPostBody", {
+    body: buffer,
+    encoding: null
+});
+
+console.assert(res.body instanceof Buffer);
+console.assert(res.body.length === 2);
+console.assert(res.body[0] === 0);
+console.assert(res.body[1] === 1);
 ```
 
 Why forked from czbaker:request?
