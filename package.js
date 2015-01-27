@@ -1,6 +1,6 @@
 Package.describe({
 	summary: "A Simplified HTTP client (forked for platform independence)",
-	version: "2.40.4",
+	version: "2.40.5",
 	git: "https://github.com/froatsnook/meteor-request.git",
 	name: "froatsnook:request"
 });
