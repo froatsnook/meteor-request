@@ -39,26 +39,41 @@ if (typeof Meteor.wrapAsync === "function") {
 _.extend(request, {
 
 	putSync: function(uri, options) {
+		if (!options) {
+			options = { };
+		}
 		options.method = "PUT";
 		return requestSync(uri, options);
 	},
 
 	patchSync: function(uri, options) {
+		if (!options) {
+			options = { };
+		}
 		options.method = "PATCH";
 		return requestSync(uri, options);
 	},
 
 	postSync: function(uri, options) {
+		if (!options) {
+			options = { };
+		}
 		options.method = "POST";
 		return requestSync(uri, options);
 	},
 
 	headSync: function(uri, options) {
+		if (!options) {
+			options = { };
+		}
 		options.method = "HEAD";
 		return requestSync(uri, options);
 	},
 
 	delSync: function(uri, options) {
+		if (!options) {
+			options = { };
+		}
 		options.method = "DELETE";
 		return requestSync(uri, options);
 	},
