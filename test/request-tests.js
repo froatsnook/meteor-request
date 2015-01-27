@@ -65,13 +65,13 @@ if (Meteor.isServer) {
         return "http://127.0.0.1:" + port + path;
     };
 
-    Tinytest.add("GET /test1", function(test) {
+    Tinytest.add("GET /test1 (basic)", function(test) {
         var addr = makeAddr("/test1");
         var res = request.getSync(addr);
         test.equal(res.body, "OK");
     });
 
-    Tinytest.add("GET /test2", function(test) {
+    Tinytest.add("GET /test2 (\"more\" async)", function(test) {
         var addr = makeAddr("/test2");
         var res = request.getSync(addr);
         test.equal(res.body, "12345");
