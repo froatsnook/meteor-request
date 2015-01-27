@@ -1,26 +1,55 @@
-# meteor-request
-
 A simplified HTTP client, packaged for Meteor (from npm)
 
-This code is courtesy of saimeunt on StackOverflow, it was given to me [here](http://stackoverflow.com/questions/25654965/downloading-remote-images-using-meteor-cfs/25655326#25655326), as
-part of a solution to a question I asked.
+Meteor's HTTP package is great, but it doesn't support retrieving binary data
+(useful, for example, when downlading an image).
 
-It was needed to address the lack of ability to deal with binary data over
-Meteor's HTTP package, until they give us support for such.
-
-Example use to grab something like an image is as follows:
+Example
+=======
 
 ```javascript
-var result = request.getSync(url, {
-	encoding: null
+var result = request.getSync("https://meteor.com/meteor-logo.png", {
+    encoding: null
 });
 
 var buffer = result.body;
 ```
 
-At which point, `buffer` contains unaltered image data that you can pass to
-something like CollectionFS for storage, which can take a `Buffer` as input.
+This Buffer can be stored in the database or written to a file.
 
-Why forked?
-===========
-Wasn't working on Mac OS X because native component bundled.
+Setup
+=====
+* Install `meteor install froatsnook:request`
+
+API
+===
+```javascript
+var res1 = request.putSync(uri, options);
+var res2 = request.patchSync(uri, options);
+var res3 = request.postSync(uri, options);
+var res4 = request.headSync(uri, options);
+var res5 = request.delSync(uri, options);
+var res5 = request.getSync(uri, options);
+```
+
+The `uri` is required.  `options` are optional, and are passed on to
+`request`.
+
+```javascript
+try {
+    var res = request.getSync(urlThatHangs, {
+        timeout: 1000
+    });
+} catch (err) {
+    console.assert(err.code === "ETIMEDOUT");
+}
+```
+
+Why forked from czbaker:request?
+================================
+I added tests, removed the native dependency on `fibers` (by using
+`Meteor.wrapAsync`), and updated to the latest `request`.
+
+License
+=======
+MIT
+
