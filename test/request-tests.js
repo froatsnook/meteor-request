@@ -19,6 +19,19 @@ if (Meteor.isServer) {
                 setTimeout(function() { res.end(); }, 50);
                 break;
 
+            case "/test3":
+                var buf1 = new Buffer([1,2,3,4]);
+                res.write(buf1);
+
+                setTimeout(function() {
+                    var buf2 = new Buffer([5,6,7,8]);
+                    res.write(buf2);
+
+                    res.end();
+                }, 50);
+
+                break;
+
             case "/method":
                 res.setHeader("X-METHOD", "HEAD");
 
@@ -62,6 +75,18 @@ if (Meteor.isServer) {
         var addr = makeAddr("/test2");
         var res = request.getSync(addr);
         test.equal(res.body, "12345");
+    });
+
+    Tinytest.add("GET /test3 (buffer)", function(test) {
+        var addr = makeAddr("/test3");
+        var res = request.getSync(addr, {
+            encoding: null
+        });
+
+        test.isTrue(res.body instanceof Buffer, "res.body should be a Buffer");
+        for (var i = 0; i < 8; i++) {
+            test.equal(res.body[i], i + 1);
+        }
     });
 
     Tinytest.add("PATCH /echo", function(test) {
