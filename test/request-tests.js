@@ -55,6 +55,10 @@ if (Meteor.isServer) {
                 });
 
                 break;
+
+            case "/hang":
+                // Do not respond.
+                break;
         }
     });
 
@@ -148,6 +152,27 @@ if (Meteor.isServer) {
         var addr = makeAddr("/method");
         var res = request.delSync(addr);
         test.equal(res.body, "DELETE");
+    });
+
+    Tinytest.add("Throw without URI", function(test) {
+        try {
+            request.getSync();
+            test.equal("did not throw", "did throw");
+        } catch (err) {
+            test.equal("did throw", "did throw");
+        }
+    });
+
+    Tinytest.add("Timeout", function(test) {
+        try {
+            var addr = makeAddr("/hang");
+            request.getSync(addr, {
+                timeout: 100
+            });
+            test.equal("did not throw", "did throw");
+        } catch (err) {
+            test.equal("did throw", "did throw");
+        }
     });
 }
 
