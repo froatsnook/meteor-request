@@ -32,6 +32,20 @@ if (Meteor.isServer) {
 
                 break;
 
+            case "/test4":
+                var buffers = [];
+
+                req.on("data", function(data) {
+                    buffers.push(data);
+                });
+
+                req.on("end", function() {
+                    res.write(Buffer.concat(buffers));
+                    res.end();
+                });
+
+                break;
+
             case "/method":
                 res.setHeader("X-METHOD", "HEAD");
 
@@ -91,6 +105,21 @@ if (Meteor.isServer) {
         for (var i = 0; i < 8; i++) {
             test.equal(res.body[i], i + 1);
         }
+    });
+
+    Tinytest.add("POST /test4 (echo binary)", function(test) {
+        var addr = makeAddr("/test4");
+        var buf = new Buffer([0,1,2]);
+        var res = request.postSync(addr, {
+            body: buf,
+            encoding: null
+        });
+
+        test.isTrue(res.body instanceof Buffer, "res.body should be a buffer");
+        test.equal(res.body.length, 3);
+        test.equal(res.body[0], 0);
+        test.equal(res.body[1], 1);
+        test.equal(res.body[2], 2);
     });
 
     Tinytest.add("PATCH /echo", function(test) {
