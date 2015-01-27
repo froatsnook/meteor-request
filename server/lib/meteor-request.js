@@ -16,7 +16,6 @@ var requestAsync = function(uri, options, callback) {
 
 	request(uri, options, function(error, response, body) {
 		if (error) {
-			console.log(error);
 			callback(error);
 		} else {
 			callback(null, {
