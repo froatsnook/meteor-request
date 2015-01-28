@@ -73,6 +73,16 @@ if (Meteor.isServer) {
             case "/hang":
                 // Do not respond.
                 break;
+
+            case "/404":
+                res.writeHead(404, "Not found.");
+                res.end();
+                break;
+
+            case "/500":
+                res.writeHead(500, "Internal server error.");
+                res.end();
+                break;
         }
     });
 
@@ -202,6 +212,18 @@ if (Meteor.isServer) {
         } catch (err) {
             test.equal("did throw", "did throw");
         }
+    });
+
+    Tinytest.add("GET /404", function(test) {
+        var addr = makeAddr("/404");
+        var res = request.getSync(addr);
+        test.equal(res.response.statusCode, 404);
+    });
+
+    Tinytest.add("GET /500", function(test) {
+        var addr = makeAddr("/500");
+        var res = request.getSync(addr);
+        test.equal(res.response.statusCode, 500);
     });
 }
 
