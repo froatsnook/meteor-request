@@ -1,7 +1,9 @@
-A simplified HTTP client, packaged for Meteor (from npm)
+npm's top HTTP client, [request](https://github.com/request/request), packaged for Meteor
 
-Meteor's HTTP package is great, but it doesn't support retrieving binary data
-(useful, for example, when downlading an image).
+Meteor's `http` package is great, but it doesn't support retrieving binary data
+(useful, for example, when downlading an image).  There are no plans to add
+this feature since that the `http` package should behave the same on the client
+as on the server.
 
 Example
 =======
@@ -33,8 +35,11 @@ var res6 = request.getSync(uri, options);
 
 Params
 ------
-The `uri` is required.  The `options` are optional, and are passed on to
-`request`.
+The `uri` (which should be a fully qualified uri or a parsed url object from
+`url.parse()`) is required.  The `options` are optional, and are passed on to
+`request`.  See
+[here](https://github.com/request/request#requestoptions-callback) for
+supported options.
 
 Errors
 ------
@@ -48,10 +53,10 @@ try {
 }
 ```
 
-Example with POST body
-----------------------
+Example with Buffer POST body and response
+------------------------------------------
 ```javascript
-var buffer = new Buffer([0,1]);
+var buffer = new Buffer([0, 1]);
 var res = request.postSync("http://example.com/echoPostBody", {
     body: buffer,
     encoding: null
