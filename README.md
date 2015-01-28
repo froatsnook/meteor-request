@@ -2,7 +2,7 @@ npm's top HTTP client, [request](https://github.com/request/request), packaged f
 
 Meteor's `http` package is great, but it doesn't support retrieving binary data
 (useful, for example, when downlading an image).  There are no plans to add
-this feature since that the `http` package should behave the same on the client
+this feature since the `http` package should behave the same on the client
 as on the server.
 
 Example
