@@ -28,7 +28,7 @@ var res2 = request.patchSync(uri, options);
 var res3 = request.postSync(uri, options);
 var res4 = request.headSync(uri, options);
 var res5 = request.delSync(uri, options);
-var res5 = request.getSync(uri, options);
+var res6 = request.getSync(uri, options);
 ```
 
 Params
