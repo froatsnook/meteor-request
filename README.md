@@ -43,6 +43,18 @@ supported options.
 
 Errors
 ------
+Normal errors generate non-200 status codes.
+
+```javascript
+var res = request.getSync(urlThatDoesNotExist);
+console.assert(res.response.statusCode === 404);
+```
+
+Other errors (mostly from
+[`http.ClientRequest`](http://nodejs.org/api/http.html#http_class_http_clientrequest))
+are thrown.  This happens when `request` gives an error in its first callback
+parameter.
+
 ```javascript
 try {
     var res = request.getSync(urlThatHangs, {
