@@ -18,7 +18,7 @@ This Buffer can be stored in the database or written to a file.
 
 Setup
 =====
-* Install `meteor install froatsnook:request`
+* Install `meteor add froatsnook:request`
 
 API
 ===
