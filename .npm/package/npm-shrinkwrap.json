@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "request": {
-      "version": "2.51.0",
+      "version": "2.52.0",
       "dependencies": {
         "bl": {
           "version": "0.9.4",
@@ -26,7 +26,7 @@
           }
         },
         "caseless": {
-          "version": "0.8.0"
+          "version": "0.9.0"
         },
         "forever-agent": {
           "version": "0.5.2"
@@ -36,14 +36,6 @@
           "dependencies": {
             "async": {
               "version": "0.9.0"
-            },
-            "mime-types": {
-              "version": "2.0.7",
-              "dependencies": {
-                "mime-db": {
-                  "version": "1.5.0"
-                }
-              }
             }
           }
         },
@@ -51,7 +43,12 @@
           "version": "5.0.0"
         },
         "mime-types": {
-          "version": "1.0.2"
+          "version": "2.0.8",
+          "dependencies": {
+            "mime-db": {
+              "version": "1.6.0"
+            }
+          }
         },
         "node-uuid": {
           "version": "1.4.2"
@@ -85,22 +82,22 @@
           }
         },
         "oauth-sign": {
-          "version": "0.5.0"
+          "version": "0.6.0"
         },
         "hawk": {
-          "version": "1.1.1",
+          "version": "2.3.1",
           "dependencies": {
             "hoek": {
-              "version": "0.9.1"
+              "version": "2.11.0"
             },
             "boom": {
-              "version": "0.4.2"
+              "version": "2.6.1"
             },
             "cryptiles": {
-              "version": "0.2.2"
+              "version": "2.0.4"
             },
             "sntp": {
-              "version": "0.2.4"
+              "version": "1.0.9"
             }
           }
         },
@@ -117,6 +114,9 @@
               "version": "0.0.5"
             }
           }
+        },
+        "isstream": {
+          "version": "0.1.1"
         }
       }
     }
