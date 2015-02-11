@@ -33,6 +33,22 @@ var res5 = request.delSync(uri, options);
 var res6 = request.getSync(uri, options);
 ```
 
+request.defaults
+----------------
+`request.defaults` returns a wrapper around the normal request API that
+defaults to whatever options you pass to it.  As of `meteor-request` 2.53.1,
+the returned wrapper includes `getSync` and friends.
+
+```javascript
+var requestWithToken = request.defaults({
+    headers: { "X-TOKEN": "d0d0309d-69cb-4435-bd43-8f3ac9266039" }
+});
+
+// Both of these requests send the X-TOKEN header.
+var res1 = requestWithToken.getSync(url1);
+var res2 = requestWithToken.getSync(url2);
+```
+
 Params
 ------
 The `uri` (which should be a fully qualified uri or a parsed url object from
@@ -83,7 +99,8 @@ console.assert(res.body[1] === 1);
 Why forked from czbaker:request?
 ================================
 I added tests, removed the native dependency on `fibers` (by using
-`Meteor.wrapAsync`), and updated to the latest `request`.
+`Meteor.wrapAsync`), updated to the latest `request`, and added new features
+like `request.defaults` support.
 
 License
 =======
