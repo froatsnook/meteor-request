@@ -74,6 +74,12 @@ if (Meteor.isServer) {
                 // Do not respond.
                 break;
 
+            case "/getToken":
+                var token = req.headers["x-token"];
+                res.write(token);
+                res.end();
+                break;
+
             case "/404":
                 res.writeHead(404, "Not found.");
                 res.end();
@@ -229,6 +235,21 @@ if (Meteor.isServer) {
         var addr = makeAddr("/500");
         var res = request.getSync(addr);
         test.equal(res.response.statusCode, 500);
+    });
+
+    Tinytest.add("Test defaults", function(test) {
+        try {
+            var defaults = request.defaults({
+                headers: { "X-TOKEN": "XYZ" }
+            });
+
+            var addr = makeAddr("/getToken");
+            var res = defaults.getSync(addr);
+            test.equal(res.body, "XYZ");
+        } catch (err) {
+            console.log(err);
+            test.equal("did not throw", "did throw");
+        }
     });
 }
 
