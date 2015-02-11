@@ -91,6 +91,7 @@ if (Meteor.isServer) {
                 break;
 
             default:
+                console.error("Bad path");
                 res.writeHead(400, "Bad path");
                 res.end();
                 break;
