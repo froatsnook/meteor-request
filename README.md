@@ -102,6 +102,11 @@ I added tests, removed the native dependency on `fibers` (by using
 `Meteor.wrapAsync`), updated to the latest `request`, and added new features
 like `request.defaults` support.
 
+Versioning
+==========
+This project doesn't use semver since it tracks request's version numbers.
+Sorry for the inconvenience.
+
 License
 =======
 MIT
