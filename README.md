@@ -51,9 +51,9 @@ var res2 = requestWithToken.getSync(url2);
 
 Params
 ------
-The `uri` (which should be a fully qualified uri or a parsed url object from
-`url.parse()`) is required.  The `options` are optional, and are passed on to
-`request`.  See
+The `uri` and `options` are both optional, but either `uri` or `options.uri ||
+url` should be set as a fully qualified uri or a parsed URL object from
+`url.parse`.  The `options` are passed on to `request`.  See
 [here](https://github.com/request/request#requestoptions-callback) for
 supported options.
 

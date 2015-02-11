@@ -7,25 +7,12 @@ request = Npm.require("request");
 //   request object (either request itself or wrapper returned by
 //   request.defaults).  Since this is a function, either uri or options must
 //   be given or else Meteor.wrapAsync will perform strangely.
-// @param uri
-//   Fully qualified uri or a parsed url object from url.parse()
-// @param [options] {Object}
+// @param options {Object}
 //   Request options.  See https://github.com/request/request#requestoptions-callback
 // @param callback {Function}
 //   Meteor.wrapAsync's callback function.
-var requestAsync = function(r, uri, options, callback) {
-    if (typeof uri === "function") {
-        callback = uri;
-        uri = undefined;
-        options = undefined;
-    }
-
-    if (typeof options === "function") {
-        callback = options;
-        options = undefined;
-    }
-
-    r(uri, options, function(error, response, body) {
+var requestAsync = function(r, options, callback) {
+    r(options, function(error, response, body) {
         if (error) {
             callback(error);
         } else {
@@ -45,50 +32,67 @@ if (typeof Meteor.wrapAsync === "function") {
     requestSync = Meteor._wrapAsync(requestAsync);
 }
 
+// Check if a uri looks like a parsed URL object.
+var uriLooksLikeURL = function(uri) {
+    if (!uri || typeof uri !== "object") {
+        return false;
+    }
+
+    if (typeof uri.path !== "string") {
+        return false;
+    }
+
+    if (typeof uri.href !== "string") {
+        return false;
+    }
+
+    return true;
+}
+
+var constructOptions = function(uri, options) {
+    if (typeof options === "object") {
+        _.extend(options, { uri: uri });
+    } else if (typeof uri === "string" || uriLooksLikeURL(uri)) {
+        options = { uri: uri };
+    } else if (typeof uri === "object") {
+        options = uri;
+    }
+
+    return options || uri || { };
+};
+
 // Add sync methods to a request-like object (`request` itself or anything
 // returned by `request.defaults`).
 var copySyncMethods = function(r) {
     _.extend(r, {
         putSync: function(uri, options) {
-            if (!options) {
-                options = { };
-            }
+            options = constructOptions(uri, options);
             options.method = "PUT";
-            return requestSync(r, uri, options);
+            return requestSync(r, options);
         },
         patchSync: function(uri, options) {
-            if (!options) {
-                options = { };
-            }
+            options = constructOptions(uri, options);
             options.method = "PATCH";
-            return requestSync(r, uri, options);
+            return requestSync(r, options);
         },
         postSync: function(uri, options) {
-            if (!options) {
-                options = { };
-            }
+            options = constructOptions(uri, options);
             options.method = "POST";
-            return requestSync(r, uri, options);
+            return requestSync(r, options);
         },
         headSync: function(uri, options) {
-            if (!options) {
-                options = { };
-            }
+            options = constructOptions(uri, options);
             options.method = "HEAD";
-            return requestSync(r, uri, options);
+            return requestSync(r, options);
         },
         delSync: function(uri, options) {
-            if (!options) {
-                options = { };
-            }
+            options = constructOptions(uri, options);
             options.method = "DELETE";
-            return requestSync(r, uri, options);
+            return requestSync(r, options);
         },
         getSync: function(uri, options) {
-            if (!options) {
-                options = { };
-            }
-            return requestSync(r, uri, options);
+            options = constructOptions(uri, options);
+            return requestSync(r, options);
         }
     });
 };

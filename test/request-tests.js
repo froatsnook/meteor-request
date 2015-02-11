@@ -1,6 +1,7 @@
 if (Meteor.isServer) {
     // Start a server to test HTTP client streams.
     var http = Npm.require("http");
+    var url = Npm.require("url");
     var server = http.createServer(function(req, res) {
         var url = req.url;
 
@@ -205,7 +206,52 @@ if (Meteor.isServer) {
         test.equal(res.body, "DELETE");
     });
 
-    Tinytest.add("Throw without URI", function(test) {
+    Tinytest.add("Just options (url in options)", function(test) {
+        try {
+            var addr = makeAddr("/method");
+            var res = request.getSync({
+                url: addr
+            });
+            test.equal(res.body, "GET");
+        } catch (err) {
+            test.equal("did not throw", "did throw");
+        }
+    });
+
+    Tinytest.add("Just options, no options.url should throw", function(test) {
+        try {
+            var res = request.getSync({ });
+            test.equal("did throw", "did not throw");
+        } catch (err) {
+            test.equal("did throw", "did throw");
+        }
+    });
+
+    Tinytest.add("With parsed url object", function(test) {
+        try {
+            var addr = makeAddr("/method");
+            var uri = url.parse(addr);
+            var res = request.getSync(uri);
+            test.equal(res.body, "GET");
+        } catch (err) {
+            test.equal("did not throw", "did throw");
+        }
+    });
+
+    Tinytest.add("With parsed url object and options", function(test) {
+        try {
+            var addr = makeAddr("/getToken");
+            var uri = url.parse(addr);
+            var res = request.getSync(uri, {
+                headers: { "X-TOKEN": "XYZ" }
+            });
+            test.equal(res.body, "XYZ");
+        } catch (err) {
+            test.equal("did not throw", "did throw");
+        }
+    });
+
+    Tinytest.add("Throw without URI/options", function(test) {
         try {
             request.getSync();
             test.equal("did not throw", "did throw");
