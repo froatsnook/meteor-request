@@ -83,6 +83,11 @@ if (Meteor.isServer) {
                 res.writeHead(500, "Internal server error.");
                 res.end();
                 break;
+
+            default:
+                res.writeHead(400, "Bad path");
+                res.end();
+                break;
         }
     });
 
