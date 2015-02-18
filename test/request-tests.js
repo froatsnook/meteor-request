@@ -313,5 +313,30 @@ if (Meteor.isServer) {
             test.equal("did not throw", "did throw");
         }
     });
+
+    Tinytest.add("request.sync should exist", function(test) {
+        test.equal(typeof request.sync, "function");
+    });
+
+    Tinytest.add("request.sync should default to GET", function(test) {
+        var addr = makeAddr("/method");
+        var res = request.sync(addr);
+        test.equal(res.body, "GET");
+    });
+
+    Tinytest.add("request.sync GET should work", function(test) {
+        var addr = makeAddr("/method");
+        var res = request.sync(addr);
+        test.equal(res.body, "GET");
+    });
+
+    Tinytest.add("request.sync with options should work", function(test) {
+        var addr = makeAddr("/getToken");
+        var res = request.sync({
+            url: addr,
+            headers: { "X-TOKEN": "XYZ" }
+        });
+        test.equal(res.body, "XYZ");
+    });
 }
 
