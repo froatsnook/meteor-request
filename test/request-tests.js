@@ -309,7 +309,7 @@ if (Meteor.isServer) {
             var res = defaults.getSync(addr);
             test.equal(res.body, "XYZ");
         } catch (err) {
-            console.log(err);
+            console.error(err);
             test.equal("did not throw", "did throw");
         }
     });
