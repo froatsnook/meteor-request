@@ -3,16 +3,31 @@ request = Npm.require("request");
 
 // Wrap request with something that can be `Meteor.wrapAsync`ed.
 //
-// @param r
-//   request object (either request itself or wrapper returned by
-//   request.defaults).  Since this is a function, either uri or options must
-//   be given or else Meteor.wrapAsync will perform strangely.
-// @param options {Object}
-//   Request options.  See https://github.com/request/request#requestoptions-callback
+// @param r {Function}
+//   request-like function (request itself or request.defaults result).
+// @param key {String}
+//   Name of request function to call, like "get" to call request.get.  If
+//   null, then call request itself.
+// @param args {...}
+//   These args are forwarded to request.
 // @param callback {Function}
-//   Meteor.wrapAsync's callback function.
-var requestAsync = function(r, options, callback) {
-    r(options, function(error, response, body) {
+//   Callback provided by Meteor.wrapAsync.
+var callAsync = function(r, key /*, ...args, callback */) {
+    var allArgs = new Array(arguments.length);
+    for (var i = 0; i < allArgs.length; i++) {
+        allArgs[i] = arguments[i];
+    }
+
+    // What to pass to request.
+    var args = allArgs.slice(2, -1);
+
+    // Meteor.wrapAync callback.
+    var callback = allArgs[allArgs.length - 1];
+
+    // Call either r itself or e.g. r.get
+    var f = key ? r[key] : r;
+
+    args.push(function(error, response, body) {
         if (error) {
             callback(error);
         } else {
@@ -22,78 +37,36 @@ var requestAsync = function(r, options, callback) {
             });
         }
     });
+
+    f.apply(r, args);
 };
 
-// Make a sync function out of requestAsync.
-var requestSync;
+// Make a sync function out of callAsync..
+var callSync;
 if (typeof Meteor.wrapAsync === "function") {
-    requestSync = Meteor.wrapAsync(requestAsync);
+    callSync = Meteor.wrapAsync(callAsync);
 } else {
-    requestSync = Meteor._wrapAsync(requestAsync);
+    callSync = Meteor._wrapAsync(callAsync);
 }
 
-// Check if a uri looks like a parsed URL object.
-var uriLooksLikeURL = function(uri) {
-    if (!uri || typeof uri !== "object") {
-        return false;
-    }
-
-    if (typeof uri.path !== "string") {
-        return false;
-    }
-
-    if (typeof uri.href !== "string") {
-        return false;
-    }
-
-    return true;
-}
-
-var constructOptions = function(uri, options) {
-    if (typeof options === "object") {
-        _.extend(options, { uri: uri });
-    } else if (typeof uri === "string" || uriLooksLikeURL(uri)) {
-        options = { uri: uri };
-    } else if (typeof uri === "object") {
-        options = uri;
-    }
-
-    return options || uri || { };
-};
+// Copy sync versions of these methods to request in copySyncMethods.
+var methods = ["put", "patch", "post", "head", "del", "get", null];
 
 // Add sync methods to a request-like object (`request` itself or anything
 // returned by `request.defaults`).
 var copySyncMethods = function(r) {
-    _.extend(r, {
-        putSync: function(uri, options) {
-            options = constructOptions(uri, options);
-            options.method = "PUT";
-            return requestSync(r, options);
-        },
-        patchSync: function(uri, options) {
-            options = constructOptions(uri, options);
-            options.method = "PATCH";
-            return requestSync(r, options);
-        },
-        postSync: function(uri, options) {
-            options = constructOptions(uri, options);
-            options.method = "POST";
-            return requestSync(r, options);
-        },
-        headSync: function(uri, options) {
-            options = constructOptions(uri, options);
-            options.method = "HEAD";
-            return requestSync(r, options);
-        },
-        delSync: function(uri, options) {
-            options = constructOptions(uri, options);
-            options.method = "DELETE";
-            return requestSync(r, options);
-        },
-        getSync: function(uri, options) {
-            options = constructOptions(uri, options);
-            return requestSync(r, options);
-        }
+    methods.forEach(function(method) {
+        var fullName = method ? method + "Sync" : "sync";
+        r[fullName] = function(/* args */) {
+            var args = new Array(2 + arguments.length);
+            args[0] = r;
+            args[1] = method;
+            for (var j = 0; j < arguments.length; j++) {
+                args[2 + j] = arguments[j];
+            }
+
+            return callSync.apply(this, args);
+        };
     });
 };
 
