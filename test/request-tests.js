@@ -227,14 +227,15 @@ if (Meteor.isServer) {
         }
     });
 
-    Tinytest.add("With parsed url object", function(test) {
+    // To me this seems undocumented, but it's how request works.
+    Tinytest.add("With parsed url object (surprisingly fails)", function(test) {
         try {
             var addr = makeAddr("/method");
             var uri = url.parse(addr);
             var res = request.getSync(uri);
-            test.equal(res.body, "GET");
+            test.equal("did throw", "did not throw");
         } catch (err) {
-            test.equal("did not throw", "did throw");
+            test.equal("did throw", "did throw");
         }
     });
 
@@ -247,6 +248,20 @@ if (Meteor.isServer) {
             });
             test.equal(res.body, "XYZ");
         } catch (err) {
+            test.equal("did not throw", "did throw");
+        }
+    });
+
+    Tinytest.add("With parsed url object in options", function(test) {
+        try {
+            var addr = makeAddr("/method");
+            var uri = url.parse(addr);
+            var res = request.getSync({
+                uri: uri
+            });
+            test.equal(res.body, "GET");
+        } catch (err) {
+            console.error(err);
             test.equal("did not throw", "did throw");
         }
     });
