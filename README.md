@@ -25,12 +25,13 @@ Setup
 API
 ===
 ```javascript
-var res1 = request.putSync(uri, options);
-var res2 = request.patchSync(uri, options);
-var res3 = request.postSync(uri, options);
-var res4 = request.headSync(uri, options);
-var res5 = request.delSync(uri, options);
-var res6 = request.getSync(uri, options);
+var res0 = request.sync(uri, options);      // sync version of calling request directly
+var res1 = request.putSync(uri, options);   // sync version of calling request.put
+var res2 = request.patchSync(uri, options); // sync version of calling request.patch
+var res3 = request.postSync(uri, options);  // sync version of calling request.post
+var res4 = request.headSync(uri, options);  // sync version of calling request.head
+var res5 = request.delSync(uri, options);   // sync version of calling request.del
+var res6 = request.getSync(uri, options);   // sync version of calling request.get
 ```
 
 request.defaults
