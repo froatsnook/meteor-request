@@ -60,7 +60,7 @@ supported options.
 
 Errors
 ------
-Normal errors generate non-200 status codes.
+Normal errors generate non-2XX status codes.
 
 ```javascript
 var res = request.getSync(urlThatDoesNotExist);
