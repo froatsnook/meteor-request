@@ -2,12 +2,10 @@ npm's top HTTP client, [request](https://github.com/request/request), packaged f
 
 Motivation
 ==========
-
 Meteor's `http` package is great, but it doesn't support retrieving binary data (useful, for example, when downlading an image).  There are no plans to add this feature since the `http` package should behave the same on the client as on the server.
 
 Example
 =======
-
 ```javascript
 var result = request.getSync("https://meteor.com/meteor-logo.png", {
     encoding: null
@@ -34,23 +32,28 @@ var res5 = request.delSync(uri, options);   // sync version of calling request.d
 var res6 = request.getSync(uri, options);   // sync version of calling request.get
 ```
 
-request.defaults
-----------------
-`request.defaults` returns a wrapper around the normal request API that defaults to whatever options you pass to it.  As of `meteor-request` 2.53.1, the returned wrapper includes `getSync` and friends.
+Response object
+---------------
+Callbacks passed to `request` are called with 3 parameters.  The `error`, the `response`, and the `body`.  The `response` and `body` are returned as an object: `{ response, body }`.  And `error` is thrown (see below).
 
 ```javascript
-var requestWithToken = request.defaults({
-    headers: { "X-TOKEN": "d0d0309d-69cb-4435-bd43-8f3ac9266039" }
-});
+// request.js
+request("http://www.google.com", function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body) // Show the HTML for the Google homepage.
+    }
+})
 
-// Both of these requests send the X-TOKEN header.
-var res1 = requestWithToken.getSync(url1);
-var res2 = requestWithToken.getSync(url2);
+// meteor-request
+try {
+    var res = request.sync("http://google.com");
+    if (res.response.statusCode == 200) {
+        console.log(res.body);
+    }
+} catch (error) {
+    // See below for info on errors
+}
 ```
-
-Params
-------
-The `uri` and `options` are both optional, but either `uri` or `options.uri || url` should be set as a fully qualified uri or a parsed URL object from `url.parse`.  The `options` are passed on to `request`.  See [here](https://github.com/request/request#requestoptions-callback) for supported options.
 
 Errors
 ------
@@ -71,6 +74,24 @@ try {
 } catch (err) {
     console.assert(err.code === "ETIMEDOUT");
 }
+```
+
+Params
+------
+The `uri` and `options` are both optional, but either `uri` or `options.uri` (or alias `options.url`) should be set as a fully qualified uri or a parsed URL object from `url.parse`.  The `options` are passed on to `request`.  See [here](https://github.com/request/request#requestoptions-callback) for supported options.
+
+request.defaults
+----------------
+`request.defaults` returns a wrapper around the normal request API that defaults to whatever options you pass to it.  As of `meteor-request` 2.53.1, the returned wrapper includes `getSync` and friends.
+
+```javascript
+var requestWithToken = request.defaults({
+    headers: { "X-TOKEN": "d0d0309d-69cb-4435-bd43-8f3ac9266039" }
+});
+
+// Both of these requests send the X-TOKEN header.
+var res1 = requestWithToken.getSync(url1);
+var res2 = requestWithToken.getSync(url2);
 ```
 
 Example with Buffer POST body and response
