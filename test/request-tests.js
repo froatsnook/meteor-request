@@ -106,19 +106,19 @@ if (Meteor.isServer) {
         return "http://127.0.0.1:" + port + path;
     };
 
-    Tinytest.add("GET /test1 (basic)", function(test) {
+    Tinytest.add("basic - GET /test1 (basic)", function(test) {
         var addr = makeAddr("/test1");
         var res = request.getSync(addr);
         test.equal(res.body, "OK");
     });
 
-    Tinytest.add("GET /test2 (\"more\" async)", function(test) {
+    Tinytest.add("basic - GET /test2 (\"more\" async)", function(test) {
         var addr = makeAddr("/test2");
         var res = request.getSync(addr);
         test.equal(res.body, "12345");
     });
 
-    Tinytest.add("GET /test3 (buffer)", function(test) {
+    Tinytest.add("basic - GET /test3 (buffer)", function(test) {
         var addr = makeAddr("/test3");
         var res = request.getSync(addr, {
             encoding: null
@@ -130,7 +130,7 @@ if (Meteor.isServer) {
         }
     });
 
-    Tinytest.add("POST /test4 (echo binary)", function(test) {
+    Tinytest.add("basic - POST /test4 (echo binary)", function(test) {
         var addr = makeAddr("/test4");
         var buf = new Buffer([0,1,2]);
         var res = request.postSync(addr, {
@@ -145,7 +145,7 @@ if (Meteor.isServer) {
         test.equal(res.body[2], 2);
     });
 
-    Tinytest.add("PATCH /echo", function(test) {
+    Tinytest.add("echo - PATCH /echo", function(test) {
         var addr = makeAddr("/echo");
         var res = request.patchSync(addr, {
             body: "patch test"
@@ -153,7 +153,7 @@ if (Meteor.isServer) {
         test.equal(res.body, "patch test");
     });
 
-    Tinytest.add("POST /echo", function(test) {
+    Tinytest.add("echo - POST /echo", function(test) {
         var addr = makeAddr("/echo");
         var res = request.postSync(addr, {
             body: "post test"
@@ -161,7 +161,7 @@ if (Meteor.isServer) {
         test.equal(res.body, "post test");
     });
 
-    Tinytest.add("PUT /echo", function(test) {
+    Tinytest.add("echo - PUT /echo", function(test) {
         var addr = makeAddr("/echo");
         var res = request.putSync(addr, {
             body: "put test"
@@ -169,44 +169,44 @@ if (Meteor.isServer) {
         test.equal(res.body, "put test");
     });
 
-    Tinytest.add("GET /method", function(test) {
+    Tinytest.add("methods - GET /method", function(test) {
         var addr = makeAddr("/method");
         var res = request.getSync(addr);
         test.equal(res.body, "GET");
     });
 
-    Tinytest.add("PUT /method", function(test) {
+    Tinytest.add("methods - PUT /method", function(test) {
         var addr = makeAddr("/method");
         var res = request.putSync(addr);
         test.equal(res.body, "PUT");
     });
 
-    Tinytest.add("PATCH /method", function(test) {
+    Tinytest.add("methods - PATCH /method", function(test) {
         var addr = makeAddr("/method");
         var res = request.patchSync(addr);
         test.equal(res.body, "PATCH");
     });
 
-    Tinytest.add("POST /method", function(test) {
+    Tinytest.add("methods - POST /method", function(test) {
         var addr = makeAddr("/method");
         var res = request.postSync(addr);
         test.equal(res.body, "POST");
     });
 
-    Tinytest.add("HEAD /method", function(test) {
+    Tinytest.add("methods - HEAD /method", function(test) {
         var addr = makeAddr("/method");
         var res = request.headSync(addr);
         var method = res.response.headers["x-method"];
         test.equal(method, "HEAD");
     });
 
-    Tinytest.add("DELETE /method", function(test) {
+    Tinytest.add("methods - DELETE /method", function(test) {
         var addr = makeAddr("/method");
         var res = request.delSync(addr);
         test.equal(res.body, "DELETE");
     });
 
-    Tinytest.add("Just options (url in options)", function(test) {
+    Tinytest.add("options - Just options (url in options)", function(test) {
         var addr = makeAddr("/method");
         var res = request.getSync({
             url: addr
@@ -214,14 +214,14 @@ if (Meteor.isServer) {
         test.equal(res.body, "GET");
     });
 
-    Tinytest.add("Just options, no options.url should throw", function(test) {
+    Tinytest.add("options - Just options, no options.url should throw", function(test) {
         test.throws(function() {
             var res = request.getSync({ });
         });
     });
 
     // To me this seems undocumented, but it's how request works.
-    Tinytest.add("With parsed url object (surprisingly fails)", function(test) {
+    Tinytest.add("options - With parsed url object (surprisingly fails)", function(test) {
         test.throws(function() {
             var addr = makeAddr("/method");
             var uri = url.parse(addr);
@@ -229,7 +229,7 @@ if (Meteor.isServer) {
         });
     });
 
-    Tinytest.add("With parsed url object and options", function(test) {
+    Tinytest.add("options - With parsed url object and options", function(test) {
         var addr = makeAddr("/getToken");
         var uri = url.parse(addr);
         var res = request.getSync(uri, {
@@ -238,7 +238,7 @@ if (Meteor.isServer) {
         test.equal(res.body, "XYZ");
     });
 
-    Tinytest.add("With parsed url object in options", function(test) {
+    Tinytest.add("options - With parsed url object in options", function(test) {
         var addr = makeAddr("/method");
         var uri = url.parse(addr);
         var res = request.getSync({
@@ -247,13 +247,13 @@ if (Meteor.isServer) {
         test.equal(res.body, "GET");
     });
 
-    Tinytest.add("Throw without URI/options", function(test) {
+    Tinytest.add("options - Throw without URI/options", function(test) {
         test.throws(function() {
             request.getSync();
         });
     });
 
-    Tinytest.add("Timeout", function(test) {
+    Tinytest.add("errors - Timeout", function(test) {
         test.throws(function() {
             var addr = makeAddr("/hang");
             request.getSync(addr, {
@@ -262,19 +262,19 @@ if (Meteor.isServer) {
         });
     });
 
-    Tinytest.add("GET /404", function(test) {
+    Tinytest.add("errors - GET /404", function(test) {
         var addr = makeAddr("/404");
         var res = request.getSync(addr);
         test.equal(res.response.statusCode, 404);
     });
 
-    Tinytest.add("GET /500", function(test) {
+    Tinytest.add("errors - GET /500", function(test) {
         var addr = makeAddr("/500");
         var res = request.getSync(addr);
         test.equal(res.response.statusCode, 500);
     });
 
-    Tinytest.add("Test defaults", function(test) {
+    Tinytest.add("defaults - Test defaults", function(test) {
         var defaults = request.defaults({
             headers: { "X-TOKEN": "XYZ" }
         });
@@ -284,23 +284,23 @@ if (Meteor.isServer) {
         test.equal(res.body, "XYZ");
     });
 
-    Tinytest.add("request.sync should exist", function(test) {
+    Tinytest.add("sync - request.sync should exist", function(test) {
         test.equal(typeof request.sync, "function");
     });
 
-    Tinytest.add("request.sync should default to GET", function(test) {
+    Tinytest.add("sync - request.sync should default to GET", function(test) {
         var addr = makeAddr("/method");
         var res = request.sync(addr);
         test.equal(res.body, "GET");
     });
 
-    Tinytest.add("request.sync GET should work", function(test) {
+    Tinytest.add("sync - request.sync GET should work", function(test) {
         var addr = makeAddr("/method");
         var res = request.sync(addr);
         test.equal(res.body, "GET");
     });
 
-    Tinytest.add("request.sync with options should work", function(test) {
+    Tinytest.add("sync - request.sync with options should work", function(test) {
         var addr = makeAddr("/getToken");
         var res = request.sync({
             url: addr,
