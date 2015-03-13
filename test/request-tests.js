@@ -207,84 +207,59 @@ if (Meteor.isServer) {
     });
 
     Tinytest.add("Just options (url in options)", function(test) {
-        try {
-            var addr = makeAddr("/method");
-            var res = request.getSync({
-                url: addr
-            });
-            test.equal(res.body, "GET");
-        } catch (err) {
-            test.equal("did not throw", "did throw");
-        }
+        var addr = makeAddr("/method");
+        var res = request.getSync({
+            url: addr
+        });
+        test.equal(res.body, "GET");
     });
 
     Tinytest.add("Just options, no options.url should throw", function(test) {
-        try {
+        test.throws(function() {
             var res = request.getSync({ });
-            test.equal("did throw", "did not throw");
-        } catch (err) {
-            test.equal("did throw", "did throw");
-        }
+        });
     });
 
     // To me this seems undocumented, but it's how request works.
     Tinytest.add("With parsed url object (surprisingly fails)", function(test) {
-        try {
+        test.throws(function() {
             var addr = makeAddr("/method");
             var uri = url.parse(addr);
-            var res = request.getSync(uri);
-            test.equal("did throw", "did not throw");
-        } catch (err) {
-            test.equal("did throw", "did throw");
-        }
+            request.getSync(uri);
+        });
     });
 
     Tinytest.add("With parsed url object and options", function(test) {
-        try {
-            var addr = makeAddr("/getToken");
-            var uri = url.parse(addr);
-            var res = request.getSync(uri, {
-                headers: { "X-TOKEN": "XYZ" }
-            });
-            test.equal(res.body, "XYZ");
-        } catch (err) {
-            test.equal("did not throw", "did throw");
-        }
+        var addr = makeAddr("/getToken");
+        var uri = url.parse(addr);
+        var res = request.getSync(uri, {
+            headers: { "X-TOKEN": "XYZ" }
+        });
+        test.equal(res.body, "XYZ");
     });
 
     Tinytest.add("With parsed url object in options", function(test) {
-        try {
-            var addr = makeAddr("/method");
-            var uri = url.parse(addr);
-            var res = request.getSync({
-                uri: uri
-            });
-            test.equal(res.body, "GET");
-        } catch (err) {
-            console.error(err);
-            test.equal("did not throw", "did throw");
-        }
+        var addr = makeAddr("/method");
+        var uri = url.parse(addr);
+        var res = request.getSync({
+            uri: uri
+        });
+        test.equal(res.body, "GET");
     });
 
     Tinytest.add("Throw without URI/options", function(test) {
-        try {
+        test.throws(function() {
             request.getSync();
-            test.equal("did not throw", "did throw");
-        } catch (err) {
-            test.equal("did throw", "did throw");
-        }
+        });
     });
 
     Tinytest.add("Timeout", function(test) {
-        try {
+        test.throws(function() {
             var addr = makeAddr("/hang");
             request.getSync(addr, {
                 timeout: 100
             });
-            test.equal("did not throw", "did throw");
-        } catch (err) {
-            test.equal("did throw", "did throw");
-        }
+        });
     });
 
     Tinytest.add("GET /404", function(test) {
@@ -300,18 +275,13 @@ if (Meteor.isServer) {
     });
 
     Tinytest.add("Test defaults", function(test) {
-        try {
-            var defaults = request.defaults({
-                headers: { "X-TOKEN": "XYZ" }
-            });
+        var defaults = request.defaults({
+            headers: { "X-TOKEN": "XYZ" }
+        });
 
-            var addr = makeAddr("/getToken");
-            var res = defaults.getSync(addr);
-            test.equal(res.body, "XYZ");
-        } catch (err) {
-            console.error(err);
-            test.equal("did not throw", "did throw");
-        }
+        var addr = makeAddr("/getToken");
+        var res = defaults.getSync(addr);
+        test.equal(res.body, "XYZ");
     });
 
     Tinytest.add("request.sync should exist", function(test) {
