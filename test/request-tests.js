@@ -284,6 +284,18 @@ if (Meteor.isServer) {
         test.equal(res.body, "XYZ");
     });
 
+    Tinytest.add("defaults - Test baseUrl", function(test) {
+        var defaults = request.defaults({
+            baseUrl: makeAddr("/")
+        });
+
+        var res = defaults.sync("getToken", {
+            headers: { "X-TOKEN": "XYZ" }
+        });
+
+        test.equal(res.body, "XYZ");
+    });
+
     Tinytest.add("sync - request.sync should exist", function(test) {
         test.equal(typeof request.sync, "function");
     });
