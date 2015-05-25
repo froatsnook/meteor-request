@@ -1,19 +1,19 @@
 Package.describe({
-	summary: "A Simplified HTTP client which supports retrieving binary data",
-	version: "2.55.0",
-	git: "https://github.com/froatsnook/meteor-request.git",
-	name: "froatsnook:request"
+    summary: "A Simplified HTTP client which supports retrieving binary data",
+    version: "2.55.0",
+    git: "https://github.com/froatsnook/meteor-request.git",
+    name: "froatsnook:request"
 });
 
 Npm.depends({
-	"request": "2.55.0"
+    "request": "2.55.0"
 })
 
 Package.onUse(function(api) {
-	api.versionsFrom('METEOR@0.9.0.1');
-	api.use('underscore','server');
-	api.addFiles('server/lib/meteor-request.js','server');
-	api.export('request','server');
+    api.versionsFrom("METEOR@0.9.0.1");
+    api.use("underscore", "server");
+    api.addFiles("server/lib/meteor-request.js", "server");
+    api.export("request", "server");
 });
 
 Package.onTest(function(api) {
@@ -22,3 +22,4 @@ Package.onTest(function(api) {
 
     api.addFiles("test/request-tests.js");
 });
+
