@@ -6,7 +6,7 @@ Package.describe({
 });
 
 Npm.depends({
-    "request": "2.55.0"
+    "request": "2.56.0"
 })
 
 Package.onUse(function(api) {
