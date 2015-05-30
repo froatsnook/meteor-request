@@ -1,3 +1,8 @@
+var port = 10492;
+var makeAddr = function(path) {
+    return "http://127.0.0.1:" + port + path;
+};
+
 if (Meteor.isServer) {
     // Start a server to test HTTP client streams.
     var http = Npm.require("http");
@@ -99,12 +104,7 @@ if (Meteor.isServer) {
         }
     });
 
-    var port = 10492;
     server.listen(port, "127.0.0.1");
-
-    var makeAddr = function(path) {
-        return "http://127.0.0.1:" + port + path;
-    };
 
     Tinytest.add("basic - GET /test1 (basic)", function(test) {
         var addr = makeAddr("/test1");
@@ -319,6 +319,38 @@ if (Meteor.isServer) {
             headers: { "X-TOKEN": "XYZ" }
         });
         test.equal(res.body, "XYZ");
+    });
+}
+
+if (Meteor.isClient) {
+    Tinytest.add("proxy - request should be defined", function(test) {
+        test.equal(typeof request, "function");
+    });
+
+    Tinytest.addAsync("proxy - basic", function(test, done) {
+        var addr = makeAddr("/test1");
+        request(addr, function(err, res) {
+            test.equal(err, null);
+            test.equal(res.body, "OK");
+            done();
+        });
+    });
+
+    Tinytest.addAsync("proxy - GET /test3 (buffer)", function(test, done) {
+        var addr = makeAddr("/test3");
+        request({
+            url: addr,
+            encoding: null
+        }, function(err, res) {
+            test.equal(err, null);
+            test.isTrue(res.body instanceof Array, "res.body should be an Array");
+            test.equal(res.body.length, 8);
+            for (var i = 0; i < 8; i++) {
+                test.equal(typeof res.body[i], "number");
+                test.equal(res.body[i], i + 1);
+            }
+            done();
+        });
     });
 }
 

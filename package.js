@@ -13,7 +13,9 @@ Package.onUse(function(api) {
     api.versionsFrom("METEOR@0.9.0.1");
     api.use("underscore", "server");
     api.addFiles("server/lib/meteor-request.js", "server");
-    api.export("request", "server");
+    api.addFiles("server/lib/request-proxy.js", "server");
+    api.addFiles("client/lib/request.js", "client");
+    api.export("request", ["client", "server"]);
 });
 
 Package.onTest(function(api) {
