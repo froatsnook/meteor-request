@@ -1,6 +1,6 @@
 Package.describe({
     summary: "A Simplified HTTP client which supports retrieving binary data",
-    version: "2.57.0",
+    version: "2.58.0",
     git: "https://github.com/froatsnook/meteor-request.git",
     name: "froatsnook:request"
 });
