@@ -1,12 +1,12 @@
 Package.describe({
     summary: "A Simplified HTTP client which supports retrieving binary data",
-    version: "2.67.0",
+    version: "2.72.0",
     git: "https://github.com/froatsnook/meteor-request.git",
     name: "froatsnook:request"
 });
 
 Npm.depends({
-    "request": "2.67.0"
+    "request": "2.72.0"
 })
 
 Package.onUse(function(api) {
