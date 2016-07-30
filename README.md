@@ -19,6 +19,11 @@ This Buffer can be stored in the database or written to a file.
 Setup
 =====
 * Install `meteor add froatsnook:request`
+* Don't forget to import if using meteor 1.3 or later
+
+```javascript
+import { request } from "meteor/froatsnook:request";
+```
 
 API
 ===
